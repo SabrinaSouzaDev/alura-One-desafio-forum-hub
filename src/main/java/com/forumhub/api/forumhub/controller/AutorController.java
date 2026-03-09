@@ -12,7 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/autores")
@@ -23,30 +23,32 @@ public class AutorController {
     private AutorRepository autorRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity buscarAutor(@PathVariable Long id){
+    public ResponseEntity buscarAutor(@PathVariable Long id) {
         var autor = autorRepository.getReferenceById(id);
         return ResponseEntity.ok(new DadosAutor(autor));
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosAutor>> listarAutores(@PageableDefault(sort = {"nome"}) Pageable pageable){
+    public ResponseEntity<Page<DadosAutor>> listarAutores(
+            @PageableDefault(size = 10, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
+
         var pagina = autorRepository.findAll(pageable).map(DadosAutor::new);
         return ResponseEntity.ok(pagina);
     }
 
     @PostMapping
-    public Autor cadastrar(@RequestBody @Valid Autor a){
+    public Autor cadastrar(@RequestBody @Valid Autor a) {
         return autorRepository.save(a);
     }
 
     @PutMapping()
-    public Autor editar(@RequestBody @Valid Autor a){
+    public Autor editar(@RequestBody @Valid Autor a) {
         return autorRepository.save(a);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void remover(@PathVariable Long id){
+    public void remover(@PathVariable Long id) {
         autorRepository.deleteById(id);
     }
 

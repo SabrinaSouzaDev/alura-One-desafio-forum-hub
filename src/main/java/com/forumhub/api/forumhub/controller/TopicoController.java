@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/topicos")
@@ -26,7 +27,7 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dados, UriComponentsBuilder builder){
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dados, UriComponentsBuilder builder) {
         var topico = new Topico(dados);
         topicoRepository.save(topico);
 
@@ -35,17 +36,19 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity buscarTopico(@PathVariable Long id){
+    public ResponseEntity buscarTopico(@PathVariable Long id) {
         var topico = topicoRepository.getReferenceById(id);
         return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
 
     }
 
-    @GetMapping
-    public ResponseEntity<Page<DadosDetalhamentoTopico>> listarTopicos(@PageableDefault(sort = {"titulo"}) Pageable pageable){
-        var pagina = topicoRepository.findAll(pageable).map(DadosDetalhamentoTopico::new);
-        return ResponseEntity.ok(pagina);
-    }
+@GetMapping
+public ResponseEntity<Page<DadosDetalhamentoTopico>> listarTopicos(Pageable pageable) {
+    // Se você não quiser definir padrão nenhum (nem tamanho, nem ordem), 
+    // deixe apenas o Pageable como parâmetro.
+    var pagina = topicoRepository.findAll(pageable).map(DadosDetalhamentoTopico::new);
+    return ResponseEntity.ok(pagina);
+}
 
     @PutMapping("/{id}")
     @Transactional
@@ -53,7 +56,8 @@ public class TopicoController {
             @PathVariable Long id,
             @RequestBody @Valid DadosCadastroTopico dados) {
 
-        var topico = topicoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tópico não encontrado"));
+        var topico = topicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tópico não encontrado"));
 
         topico.atualizarDados(dados);
         topicoRepository.save(topico);

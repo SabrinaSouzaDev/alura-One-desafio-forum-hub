@@ -31,6 +31,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                 
                 // 2. Liberar Swagger e Documentação (Sua configuração vital)
                 req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
+                req.requestMatchers("/error").permitAll();
                 
                 // 3. Qualquer outra rota exige o Token
                 req.anyRequest().authenticated();
