@@ -41,9 +41,18 @@ public class AutorController {
         return autorRepository.save(a);
     }
 
-    @PutMapping()
-    public Autor editar(@RequestBody @Valid Autor a) {
-        return autorRepository.save(a);
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity editar(@PathVariable Long id, @RequestBody @Valid DadosAutor dados) {
+        // 1. Carrega o autor que já existe no banco
+        var autor = autorRepository.getReferenceById(id);
+
+        // 2. Atualiza os campos usando o método que criamos na entidade
+        autor.atualizarInformacoes(dados);
+
+        // 3. Retorna o autor atualizado (convertido para o DTO de detalhamento ou o
+        // próprio Record)
+        return ResponseEntity.ok(new DadosAutor(autor));
     }
 
     @DeleteMapping("/{id}")

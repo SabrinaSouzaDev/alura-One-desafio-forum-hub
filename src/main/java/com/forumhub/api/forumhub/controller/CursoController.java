@@ -30,9 +30,10 @@ public class CursoController {
 
     @GetMapping
     public ResponseEntity<Page<DadosCurso>> listarCursos(
-            @PageableDefault(size = 10, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
+        @PageableDefault(size = 10, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        var pagina = cursoRepository.findAll(pageable).map(DadosCurso::new);
+        var pagina = cursoRepository.findAllByAtivoTrue(pageable).map(DadosCurso::new);
+
         return ResponseEntity.ok(pagina);
     }
 
@@ -41,14 +42,22 @@ public class CursoController {
         return cursoRepository.save(a);
     }
 
-    @PutMapping()
-    public Curso editar(@RequestBody @Valid Curso a) {
-        return cursoRepository.save(a);
-    }
+@PutMapping("/{id}")
+@Transactional
+public ResponseEntity editar(@PathVariable Long id, @RequestBody @Valid DadosCurso dados) {
+    var curso = cursoRepository.getReferenceById(id);
+    
+    curso.atualizarInformacoes(dados);
+
+    return ResponseEntity.ok(new DadosCurso(curso));
+}
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void remover(@PathVariable Long id) {
-        cursoRepository.deleteById(id);
+    public ResponseEntity remover(@PathVariable Long id) {
+        var curso = cursoRepository.getReferenceById(id);
+        curso.excluir();
+        
+        return ResponseEntity.noContent().build();
     }
 }
