@@ -119,6 +119,14 @@ mvn spring-boot:run
 
 A API estará disponível em: http://localhost:8080
 
+______
+
+## 📖 Documentação da API (Swagger)
+
+A API utiliza o **Swagger UI** para facilitar a visualização e o teste dos endpoints. Com a aplicação rodando, você pode acessar a documentação interativa através do link:
+
+* **URL:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
 _______
 
 ## 🛠️ Como Usar (Endpoints Principais)
