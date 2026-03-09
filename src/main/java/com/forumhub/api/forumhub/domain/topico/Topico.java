@@ -40,6 +40,8 @@ public class Topico {
     @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Resposta> respostas  = new ArrayList<>();
 
+    private Boolean ativo = true;
+    
     public Topico(DadosCadastroTopico dados) {
         this.titulo = dados.titulo();
         this.mensagem = dados.mensagem();
@@ -48,6 +50,7 @@ public class Topico {
         this.autor = dados.autor();
         this.curso = dados.curso();
         this.respostas = new ArrayList<>();
+        this.ativo = true;
 
     }
 
@@ -70,5 +73,13 @@ public class Topico {
         if (dados.curso() != null) {
             this.curso = dados.curso();
         }
+    }
+
+    public void excluir() {
+        this.ativo = false;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
     }
 }

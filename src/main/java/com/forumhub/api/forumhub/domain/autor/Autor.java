@@ -19,6 +19,7 @@ public class Autor {
     private Long id;
     private String nome;
     private String email;
+    private Boolean ativo = true;
 
     public Autor(DadosAutor dados) {
         this.nome = dados.nome();
@@ -34,4 +35,9 @@ public class Autor {
             this.email = dados.email();
         }
     }
+
+    public void excluir() {
+        this.ativo = false;
+    }
+
 }

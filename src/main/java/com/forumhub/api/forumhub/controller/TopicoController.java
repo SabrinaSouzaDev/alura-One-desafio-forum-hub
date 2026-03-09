@@ -38,17 +38,22 @@ public class TopicoController {
     @GetMapping("/{id}")
     public ResponseEntity buscarTopico(@PathVariable Long id) {
         var topico = topicoRepository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
 
+        // Se o tópico estiver inativo, retorna 404 para o Swagger
+        if (!topico.getAtivo()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
     }
 
-@GetMapping
-public ResponseEntity<Page<DadosDetalhamentoTopico>> listarTopicos(Pageable pageable) {
-    // Se você não quiser definir padrão nenhum (nem tamanho, nem ordem), 
-    // deixe apenas o Pageable como parâmetro.
-    var pagina = topicoRepository.findAll(pageable).map(DadosDetalhamentoTopico::new);
-    return ResponseEntity.ok(pagina);
-}
+    @GetMapping
+    public ResponseEntity<Page<DadosDetalhamentoTopico>> listarTopicos(Pageable pageable) {
+        // Usamos o método que criamos no Repository para filtrar apenas os ativos
+        var pagina = topicoRepository.findAllByAtivoTrue(pageable)
+                .map(DadosDetalhamentoTopico::new);
+        return ResponseEntity.ok(pagina);
+    }
 
     @PutMapping("/{id}")
     @Transactional
@@ -59,20 +64,23 @@ public ResponseEntity<Page<DadosDetalhamentoTopico>> listarTopicos(Pageable page
         var topico = topicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tópico não encontrado"));
 
+        if (!topico.getAtivo()) {
+            return ResponseEntity.notFound().build();
+        }
+
         topico.atualizarDados(dados);
-        topicoRepository.save(topico);
 
         return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<Void> excluirTopico(@PathVariable Long id) {
-        if (!topicoRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity excluir(@PathVariable Long id) {
+        // Agora o 'topicoRepository' será reconhecido pelo Java
+        Topico topico = topicoRepository.getReferenceById(id);
 
-        topicoRepository.deleteById(id);
+        topico.excluir(); // Método que criamos na classe Topico
+
         return ResponseEntity.noContent().build();
     }
 

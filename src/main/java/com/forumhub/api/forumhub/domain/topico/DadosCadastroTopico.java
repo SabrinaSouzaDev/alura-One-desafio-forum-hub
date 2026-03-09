@@ -24,6 +24,9 @@ public record DadosCadastroTopico(
         Autor autor,
         @NotNull
         @Valid
-        Curso curso
- ) {
+        Curso curso,
+        Boolean ativo
+ ) 
+ 
+ {
 }
