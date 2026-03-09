@@ -51,34 +51,6 @@ A API oferece os seguintes recursos principais:
 
 ---
 
-# 🏗️ Arquitetura do Projeto
-
-A aplicação segue uma arquitetura baseada em camadas:
-
-```json
-src
-│
-├── controller
-│ └── endpoints REST
-│
-├── domain
-│ └── entidades e regras de negócio
-│
-├── dto
-│ └── objetos de transferência de dados
-│
-├── repository
-│ └── acesso ao banco de dados
-│
-├── service
-│ └── lógica de negócio
-│
-└── infra
-└── segurança, exceções e configurações
-
-```
----
-
 # 🔐 Autenticação
 
 A API utiliza **JWT (JSON Web Token)** para autenticação.
