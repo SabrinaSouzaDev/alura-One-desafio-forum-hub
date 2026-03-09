@@ -6,6 +6,22 @@ O projeto simula o funcionamento de um **fórum de discussão**, permitindo que 
 
 ---
 
+### 📚 Objetivo do Projeto
+
+Este projeto foi desenvolvido para praticar:
+
+- Construção de APIs REST
+
+- Spring Boot
+
+- Segurança com JWT
+
+- Persistência com JPA
+
+- Boas práticas de arquitetura
+
+---
+
 # 📌 Funcionalidades
 
 A API oferece os seguintes recursos principais:
@@ -105,33 +121,67 @@ Entrar na pasta
 cd alura-One-desafio-forum-hub
 ```
 
+### 🚀 Como Rodar o Projeto
+
+**Configure o Banco de Dados**
+Certifique-se de que o schema `forumhub_schema` existe e as credenciais no arquivo `src/main/resources/application.properties` estão corretas:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/forumhub_schema
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+```
+
+#### Compile o Projeto e teste
+No terminal, na raiz do projeto, execute:
+
+```Bash
+mvn clean install -DskipTests
+```
+
+### Execute a Aplicação
+
+```Bash
 mvn spring-boot:run
+```
 
-### 🧪 Testando a API
+A API estará disponível em: http://localhost:8080
 
-Você pode testar os endpoints utilizando:
+_______
 
-### 📚 Objetivo do Projeto
+## 🛠️ Como Usar (Endpoints Principais)
 
-Este projeto foi desenvolvido para praticar:
+Abaixo, os detalhes da implementação de **Exclusão Lógica** (campo `ativo`):
 
-- Construção de APIs REST
+### **1. Listar Tópicos**
+* **Método:** `GET /topicos`
+* **Descrição:** Retorna apenas tópicos que possuem `ativo: true`.
+* **Recursos:** Suporta paginação e ordenação (Ex: `
+{
+  "page": 0,
+  "size": 10
+}
+`).
 
-- Spring Boot
+### **2. Buscar por ID**
+* **Método:** `GET /topicos/{id}`
+* **Comportamento:** Se o tópico existir no banco, mas estiver inativo (`ativo: false`), a API retornará `404 Not Found`.
 
-- Segurança com JWT
+### **3. Atualizar Tópico**
+* **Método:** `PUT /topicos/{id}`
+* **Regra:** Não é permitido atualizar tópicos que foram marcados como inativos. Caso o ID pertença a um tópico excluído logicamente, a API retornará `404`.
 
-- Persistência com JPA
+### **4. Remover Tópico (Soft Delete)**
+* **Método:** `DELETE /topicos/{id}`
+* **Comportamento:** O registro **não** é apagado fisicamente do banco de dados. O campo `ativo` é alterado para `false`, preservando o histórico e a integridade dos relacionamentos com autores e respostas.
+______
 
-- Boas práticas de arquitetura
-
-
-### 👩‍💻 Autora
-
-**Sabrina Souza**
-
-GitHub
-https://github.com/SabrinaSouzaDev
+### Contato
+<div style="display: inline_block" align="left" > 
+<a href="https://discord.gg/QXnhv9H7fC" target="_blank" alt="Sabrina Souza#5541" title="Sabrina Souza#5541"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" target="_blank"></a>
+  <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJNrcmhcnjzCPDCbxXmtkDlWpFgcKKMPHktkGdltmNQvzLqFwwJDqCPpQHKbTKvQkgNwrbq" target="_blank" alt="lynxsabri@gmail.com" title="lynxsabri@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+  <a href="https://www.linkedin.com/in/sabrina-souza-6361a5148/" target="_blank" alt="sabrina-souza-6361a5148" title="sabrina-souza-6361a5148"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"/>
+  </a>
 
 ### 📄 Licença
 
