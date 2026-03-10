@@ -99,9 +99,10 @@ cd alura-One-desafio-forum-hub
 Certifique-se de que o schema `forumhub_schema` existe e as credenciais no arquivo `src/main/resources/application.properties` estão corretas:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/forumhub_schema
+spring.datasource.url=jdbc:postgresql://localhost:5432/forumhub_schema
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
+spring.datasource.driver-class-name=org.postgresql.Driver
 ```
 
 #### Compile o Projeto e teste
